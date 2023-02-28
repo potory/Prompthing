@@ -41,9 +41,16 @@ var terms = new Term[]
 };
 
 var compile = new TemplateCompiler(new NodeFactory());
-var template = compile.CompileFrom("{{term1}} and {{term2}}");
-var renderer = new TemplateRenderer(terms);
 
-var str = renderer.Render(template);
+var templates = new[]
+{
+    compile.CompileFrom("{{term1}} and {{term1}}", "template1"),
+    compile.CompileFrom("{{ref:template1}} and {{term2}}")
+};
+
+var renderer = new TemplateRenderer(templates, terms);
+
+var str1 = renderer.Render(templates[0]).Finish();
+var str2 = renderer.Render(templates[1]).Finish();
 
 Console.ReadKey();

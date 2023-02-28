@@ -4,12 +4,12 @@ namespace Prompthing.Core.Templates;
 
 public class Template : ITemplate
 {
-    private readonly List<INode> _nodes;
+    public string? Name { get; }
+    public IReadOnlyList<INode> Nodes { get; }
 
-    public IReadOnlyList<INode> Nodes => _nodes;
-
-    public Template(List<INode> nodes)
+    public Template(string? name, List<INode> nodes)
     {
-        _nodes = nodes;
+        Name = name;
+        Nodes = nodes;
     }
 }

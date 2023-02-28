@@ -2,5 +2,5 @@
 
 public interface ITemplateCompiler
 {
-    ITemplate CompileFrom(string input);
+    ITemplate CompileFrom(string input, string? name = null);
 }

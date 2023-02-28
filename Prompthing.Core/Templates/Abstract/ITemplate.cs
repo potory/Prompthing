@@ -2,5 +2,6 @@
 
 public interface ITemplate
 {
+    string Name { get; }
     IReadOnlyList<INode> Nodes { get; }
 }

@@ -21,7 +21,7 @@ public partial class TemplateCompiler : ITemplateCompiler
         _nodeFactory = nodeFactory;
     }
 
-    public ITemplate CompileFrom(string input)
+    public ITemplate CompileFrom(string input, string? name = null)
     {
         var inputTokens = InputTokens(input);
         var nodes = new List<INode>(inputTokens.Length);
@@ -34,7 +34,7 @@ public partial class TemplateCompiler : ITemplateCompiler
                     : new TextNode(token));
         }
 
-        return new Template(nodes);
+        return new Template(name, nodes);
     }
 
     private INode CreateNode(string token)

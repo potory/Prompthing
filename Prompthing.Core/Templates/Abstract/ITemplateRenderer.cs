@@ -2,5 +2,6 @@
 
 public interface ITemplateRenderer
 {
-    string Render(ITemplate template);
+    ITemplateRenderer Render(ITemplate template);
+    string Finish();
 }
