@@ -1,6 +1,6 @@
-﻿using Prompthing.Core.Abstract;
+﻿using Prompthing.Core.Templates.Abstract;
 
-namespace Prompthing.Core.Nodes;
+namespace Prompthing.Core.Templates.Nodes;
 
 public class ReferenceNode : INode
 {

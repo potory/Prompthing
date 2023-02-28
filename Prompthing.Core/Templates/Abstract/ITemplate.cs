@@ -1,4 +1,4 @@
-﻿namespace Prompthing.Core.Abstract;
+﻿namespace Prompthing.Core.Templates.Abstract;
 
 public interface ITemplate
 {

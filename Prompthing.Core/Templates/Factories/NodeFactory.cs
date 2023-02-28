@@ -1,7 +1,7 @@
-﻿using Prompthing.Core.Abstract;
-using Prompthing.Core.Nodes;
+﻿using Prompthing.Core.Templates.Abstract;
+using Prompthing.Core.Templates.Nodes;
 
-namespace Prompthing.Core.Factories;
+namespace Prompthing.Core.Templates.Factories;
 
 public enum NodeType
 {

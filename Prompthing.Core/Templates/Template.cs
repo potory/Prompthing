@@ -1,6 +1,6 @@
-﻿using Prompthing.Core.Abstract;
+﻿using Prompthing.Core.Templates.Abstract;
 
-namespace Prompthing.Core;
+namespace Prompthing.Core.Templates;
 
 public class Template : ITemplate
 {

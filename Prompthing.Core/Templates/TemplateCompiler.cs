@@ -1,10 +1,10 @@
 ﻿using System.Text.RegularExpressions;
-using Prompthing.Core.Abstract;
-using Prompthing.Core.Nodes;
+using Prompthing.Core.Templates.Abstract;
+using Prompthing.Core.Templates.Nodes;
 
-namespace Prompthing.Core;
+namespace Prompthing.Core.Templates;
 
-public partial class TemplateCompiler
+public partial class TemplateCompiler : ITemplateCompiler
 {
     [GeneratedRegex("({{[^}]+}})")]
     private static partial Regex SplitRegex();
