@@ -1,31 +1,25 @@
-﻿namespace Prompthing.Core.Abstract;
+﻿namespace Prompthing.Core.Abstract.Tree;
 
 /// <summary>
 /// This interface defines the basic functionality of a node in a tree structure.
 /// </summary>
-/// <typeparam name="TData">The type of data associated with the node.</typeparam>
-public interface INode<TData>
+/// <typeparam name="TOutput">The type of output associated with the node system.</typeparam>
+public interface INode<TOutput>
 {
     /// <summary>
     /// Evaluates the node.
     /// </summary>
-    void Evaluate();
+    void Evaluate(TOutput output);
     
     /// <summary>
     /// Gets the parent container of the node.
     /// </summary>
     /// <returns>The parent container of the node.</returns>
-    IContainer<TData> Parent { get; }
+    IContainer<TOutput> Parent { get; }
 
     /// <summary>
     /// Sets the parent container of the node.
     /// </summary>
     /// <param name="parent">The parent container to set.</param>
-    void SetParent(IContainer<TData> parent);
-
-    /// <summary>
-    /// Sets the data associated with the node.
-    /// </summary>
-    /// <param name="data">The data to set.</param>
-    void SetData(TData data);
+    void SetParent(IContainer<TOutput> parent);
 }
