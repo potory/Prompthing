@@ -63,6 +63,12 @@ public class TokenInterpreter
 
         if (IsRandomToken(tokenValue))
             return ResolveRandomToken(tokenValue);
+        
+        if (IsBackspaceNode(tokenValue))
+            return ResolveBackspaceNode(tokenValue);
+
+        if (IsWrapperNode(tokenValue))
+            return ResolveWrapperNode(tokenValue);
 
         throw new ArgumentException($"Invalid token: {tokenValue}");
     }
@@ -88,7 +94,7 @@ public class TokenInterpreter
     /// </summary>
     /// <param name="token">The token to extract the value from.</param>
     /// <returns>The value of the token.</returns>
-    private static string ExtractTokenValue(string token) => 
+    public static string ExtractTokenValue(string token) => 
         token.Substring(2, token.Length - 4);
 
     /// <summary>
@@ -179,6 +185,99 @@ public class TokenInterpreter
     }
 
     /// <summary>
+    /// Determines whether the given token value represents a backspace node.
+    /// </summary>
+    /// <param name="tokenValue">The token value to check.</param>
+    /// <returns>true if the token value represents a backspace node; otherwise, false.</returns>
+    private static bool IsBackspaceNode(string tokenValue) =>
+        !string.IsNullOrEmpty(tokenValue) && (tokenValue.StartsWith("#b:") || tokenValue.StartsWith("#backspace:"));
+
+    /// <summary>
+    /// Resolves a backspace node and returns the corresponding BasicNode.
+    /// </summary>
+    /// <param name="tokenValue">The backspace node token to resolve.</param>
+    /// <returns>A BasicNode representing the resolved backspace node.</returns>
+    private static BasicNode ResolveBackspaceNode(string tokenValue)
+    {
+        var arguments = GetArguments(tokenValue);
+
+        if (arguments.Length == 0)
+        {
+            throw new ArgumentException("Token value must have at least one argument");
+        }
+
+        if (!int.TryParse(arguments[0], out int value))
+        {
+            throw new ArgumentException("Backspace node argument must be an integer");
+        }
+
+        return new BackspaceNode(value);
+    }
+
+    /// <summary>
+    /// Determines whether the given token value represents a wrapper node.
+    /// </summary>
+    /// <param name="tokenValue">The token value to check.</param>
+    /// <returns>true if the token value represents a wrapper node; otherwise, false.</returns>
+    private bool IsWrapperNode(string tokenValue) =>
+        !string.IsNullOrEmpty(tokenValue) && (tokenValue.StartsWith("#w:") || tokenValue.StartsWith("#wrapper:"));
+
+    /// <summary>
+    /// Resolves a wrapper node and returns the corresponding BasicNode.
+    /// </summary>
+    /// <param name="tokenValue">The wrapper node token to resolve.</param>
+    /// <returns>A BasicNode representing the resolved wrapper node.</returns>
+    private BasicNode ResolveWrapperNode(string tokenValue)
+    {
+        var arguments = GetArguments(tokenValue);
+
+        if (arguments.Length != 1)
+        {
+            throw new ArgumentException("Wrapper must have only one argument");
+        }
+
+        var argument = arguments.Single();
+
+        int parenthesisIndex = argument.IndexOf('(');
+
+        if (parenthesisIndex == -1)
+        {
+            throw new ArgumentException("Wrapper node argument must have parentheses");
+        }
+
+        string wrapperName = argument[..parenthesisIndex];
+        string nodeName = argument.Substring(parenthesisIndex + 1, argument.Length - (parenthesisIndex + 2));
+
+        if (string.IsNullOrEmpty(wrapperName))
+        {
+            throw new ArgumentException("Wrapper node wrapper name cannot be null or empty");
+        }
+
+        if (string.IsNullOrEmpty(nodeName))
+        {
+            throw new ArgumentException("Wrapper node node name cannot be null or empty");
+        }
+
+        var node = InterpretTokenValue(nodeName);
+        var wrapper = _referencePool.CreateReference<Wrapper>(wrapperName);
+
+        return new WrapperNode(node, wrapper);
+    }
+
+    /// <summary>
+    /// Gets the arguments for a token by extracting the substring after the first colon and splitting it by semicolons.
+    /// </summary>
+    /// <param name="tokenValue">The token value to extract arguments from.</param>
+    /// <returns>An array of strings representing the arguments.</returns>
+    private static string[] GetArguments(string tokenValue)
+    {
+        var argsIndex = tokenValue.IndexOf(':') + 1;
+        var arguments = tokenValue.Substring(argsIndex, tokenValue.Length - argsIndex).Split(';');
+
+        return arguments;
+    }
+
+    /// <summary>
     /// Determines the minimum and maximum number of iterations for a loop based on the given iterations argument.
     /// </summary>
     /// <param name="iterations">The iterations argument to parse.</param>
@@ -227,18 +326,5 @@ public class TokenInterpreter
         }
 
         return (minIterations, maxIterations);
-    }
-
-    /// <summary>
-    /// Gets the arguments for a token by extracting the substring after the first colon and splitting it by semicolons.
-    /// </summary>
-    /// <param name="tokenValue">The token value to extract arguments from.</param>
-    /// <returns>An array of strings representing the arguments.</returns>
-    private static string[] GetArguments(string tokenValue)
-    {
-        var argsIndex = tokenValue.IndexOf(':') + 1;
-        var arguments = tokenValue.Substring(argsIndex, tokenValue.Length - argsIndex).Split(';');
-
-        return arguments;
     }
 }

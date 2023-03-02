@@ -11,7 +11,9 @@ public class DatasetCompiler
         var pool = new ReferencePool();
 
         JObject jsonRoot = JObject.Parse(jsonDataset);
+
         MapCategoriesToPool(jsonRoot, pool);
+        MapWrappersToPool(jsonRoot, pool);
 
         return CompileTemplates(jsonRoot, pool);
     }
@@ -49,13 +51,39 @@ public class DatasetCompiler
         }
     }
 
+    private void MapWrappersToPool(JObject jsonObject, ReferencePool referencePool)
+    {
+        if (jsonObject == null)
+        {
+            throw new ArgumentNullException(nameof(jsonObject));
+        }
+
+        if (referencePool == null)
+        {
+            throw new ArgumentNullException(nameof(referencePool));
+        }
+
+        var categoriesRoot = jsonObject.GetValue("Wrappers", StringComparison.OrdinalIgnoreCase);
+
+        if (categoriesRoot == null)
+        {
+            return;
+        }
+
+        Wrapper[] wrappers = CompileWrappers(categoriesRoot, referencePool);
+
+        foreach (var category in wrappers)
+        {
+            referencePool.AddObject(category.Name, category);
+        }
+    }
 
     /// <summary>
     /// Compiles an array of Category objects from a JObject.
     /// </summary>
     /// <param name="data">The JObject to compile.</param>
     /// <returns>The compiled Category objects.</returns>
-    private Category[] CompileCategories(JToken data)
+    private static Category[] CompileCategories(JToken data)
     {
         var compiler = new CategoryCompiler();
 
@@ -77,6 +105,28 @@ public class DatasetCompiler
         return categories;
     }
 
+    private static Wrapper[] CompileWrappers(JToken data, ReferencePool referencePool)
+    {
+        var compiler = new WrapperCompiler(new TokenInterpreter(referencePool));
+
+        var wrappersArray = (JArray)data;
+        var wrappers = new Wrapper[wrappersArray.Count];
+
+        for (int i = 0; i < wrappers.Length; i++)
+        {
+            try
+            {
+                wrappers[i] = compiler.Compile((JObject) wrappersArray[i]);
+            }
+            catch (CategoryCompilationException ex)
+            {
+                throw new DatasetCompilationException($"Failed to compile wrapper object at index {i}: {ex.Message}", ex);
+            }
+        }
+
+        return wrappers;
+    }
+
     /// <summary>
     /// Compiles an array of templates from a JObject.
     /// </summary>
@@ -85,7 +135,7 @@ public class DatasetCompiler
     /// <returns>An array of Template objects.</returns>
     /// <exception cref="ArgumentNullException">Thrown when jsonObject or referencePool is null.</exception>
     /// <exception cref="DatasetCompilationException">Thrown when the 'Templates' property is missing from the JObject.</exception>
-    private Template[] CompileTemplates(JObject jsonObject, ReferencePool referencePool)
+    private static Template[] CompileTemplates(JObject jsonObject, ReferencePool referencePool)
     {
         if (jsonObject == null)
         {
