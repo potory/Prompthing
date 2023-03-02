@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using Prompthing.Core.Templates.Basic;
+using Prompthing.Core.Templates.Nodes.Basic;
 
-namespace Prompthing.Core.Templates;
+namespace Prompthing.Core.Templates.Nodes;
 
 public sealed class TextNode : BasicNode
 {

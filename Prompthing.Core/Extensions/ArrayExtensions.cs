@@ -7,7 +7,7 @@ public static class ArrayExtensions
     public static T OneOfWeighted<T>(this IReadOnlyCollection<T> collection) where T: IWeighted
     {
         var totalWeight = collection.Sum(item => item.Weight);
-        var randomValue = new Random().NextDouble() * totalWeight;
+        var randomValue = Random.Shared.NextDouble() * totalWeight;
 
         foreach (var item in collection)
         {

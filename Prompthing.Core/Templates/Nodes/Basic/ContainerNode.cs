@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Prompthing.Core.Abstract.Tree;
 
-namespace Prompthing.Core.Templates.Basic;
+namespace Prompthing.Core.Templates.Nodes.Basic;
 
 public class ContainerNode : BasicNode, IContainer<StringBuilder>
 {
@@ -14,14 +14,34 @@ public class ContainerNode : BasicNode, IContainer<StringBuilder>
         {
             _children[i].Evaluate(output);
         }
-
+    
         EvaluateSelf(output);
     }
 
-    public void AddChild(INode<StringBuilder> child) => _children.Add(child);
-    public void RemoveChild(INode<StringBuilder> child) => _children.Remove(child);
+    public void AddChild(INode<StringBuilder> child)
+    {
+        _children.Add(child);
+        child.SetParent(this);
+    }
+
+    public void RemoveChild(INode<StringBuilder> child)
+    {
+        _children.Remove(child);
+        child.SetParent(null);
+    }
+
+    public void ClearChildren()
+    {
+        foreach (var child in _children)
+        {
+            child.SetParent(null);
+        }
+        
+        _children.Clear();
+    }
+
     public IEnumerable<INode<StringBuilder>> GetChildren() => _children;
-    public void ClearChildren() => _children.Clear();
+
     public bool HasChild(INode<StringBuilder> child) => _children.Contains(child);
 
     protected virtual void EvaluateSelf(StringBuilder output)

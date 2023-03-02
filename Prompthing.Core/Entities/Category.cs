@@ -5,7 +5,7 @@ public class Category
     public string Name { get; }
     public IReadOnlyList<Term> Terms { get; }
 
-    public Category(string name, Term[] terms)
+    public Category(string name, IReadOnlyList<Term> terms)
     {
         Name = name;
         Terms = terms;
