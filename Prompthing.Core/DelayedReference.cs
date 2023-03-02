@@ -29,17 +29,15 @@ public class DelayedReference
     /// </summary>
     public object Value 
     {
-        get 
+        get
         {
             if (_useCache && _value != null)
             {
                 return _value;
             }
-            else
-            {
-                _value = _source();
-                return _value;
-            }
+
+            _value = _source();
+            return _value;
         }
     }
 

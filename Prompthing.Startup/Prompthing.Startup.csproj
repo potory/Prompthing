@@ -15,4 +15,10 @@
       <PackageReference Include="BenchmarkDotNet" Version="0.13.5" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Example.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
