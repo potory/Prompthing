@@ -11,7 +11,19 @@
       "template": "a {{size}} {{animal}}"
     },
     {
-      "template": "a {{#r: \"portrait\"; \"photo\"}} of {{#r: #t:personTemplate; #t:animalTemplate}} in a {{location}}"
+      "name": "compose",
+      "isSnippet": true,
+      "template": "a {{#r: \"portrait\"; \"photo\"}} of a dog in a {{location}}"
+    },
+    {
+      "template": "{{#w:exampleWrapper(#t:compose)}}"
+    }
+  ],
+  "wrappers": [
+    {
+      "name": "exampleWrapper",
+      "content": "content",
+      "wrapper": "Hi! Here is your prompt: \"{{content}}\". {{#r:\"I'm an example wrapper!\";\"I also can use all templates features!\"}}"
     }
   ],
   "categories": [
