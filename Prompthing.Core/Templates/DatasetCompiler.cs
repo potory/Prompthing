@@ -11,7 +11,6 @@ public class DatasetCompiler
         var pool = new ReferencePool();
 
         JObject jsonRoot = JObject.Parse(jsonDataset);
-
         MapCategoriesToPool(jsonRoot, pool);
 
         return CompileTemplates(jsonRoot, pool);

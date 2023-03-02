@@ -18,15 +18,21 @@ public sealed class CategoryCompiler : ICompiler<JObject, Category>
     {
         var nameToken = obj.GetValue("Name", StringComparison.OrdinalIgnoreCase);
         var valuesToken = obj.GetValue("Values", StringComparison.OrdinalIgnoreCase);
-
-        if (valuesToken == null)
-        {
-            throw new CategoryCompilationException("Could not find 'Values' property in category object.");
-        }
+        var pathToken = obj.GetValue("Path", StringComparison.OrdinalIgnoreCase);
 
         if (nameToken == null)
         {
             throw new CategoryCompilationException("Could not find 'Name' property in category object.");
+        }
+
+        if (pathToken != null)
+        {
+            valuesToken = JToken.Parse(File.ReadAllText(pathToken.ToString()));
+        }
+
+        if (valuesToken == null)
+        {
+            throw new CategoryCompilationException("Could not find 'Values' or 'Path' properties in category object.");
         }
 
         var valuesArray = (JArray)valuesToken;
