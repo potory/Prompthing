@@ -8,7 +8,7 @@ public class Template
     public string Name { get; }
     public bool IsSnippet { get; }
 
-    public Template(string name, bool isSnippet, BasicNode node)
+    public Template(string name, BasicNode node, bool isSnippet = false)
     {
         Name = name;
         IsSnippet = isSnippet;

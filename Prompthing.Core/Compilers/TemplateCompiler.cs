@@ -62,7 +62,7 @@ public partial class TemplateCompiler : ICompiler<JObject, Template>
             container.AddChild(_interpreter.Interpret(segment));
         }
 
-        return new Template(name, isSnippet, container);
+        return new Template(name, container, isSnippet);
     }
 
     /// <summary>
