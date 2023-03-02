@@ -112,7 +112,14 @@ public class DatasetCompiler
 
         for (int i = 0; i < templates.Length; i++)
         {
-            templates[i] = compiler.Compile((JObject) array[i]);
+            var template = compiler.Compile((JObject) array[i]);
+
+            if (templates.Any(x => x != null && x.Name == template.Name))
+            {
+                throw new DatasetCompilationException($"Duplicate template name '{template.Name}' found in dataset. Please ensure that all template names are unique.");
+            }
+            
+            templates[i] = template;
             referencePool.AddObject(templates[i].Name, templates[i]);
         }
         
