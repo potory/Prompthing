@@ -16,7 +16,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Example.json">
+      <None Update="example.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="animals.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

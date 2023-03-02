@@ -1,29 +1,52 @@
 ﻿{
   "templates": [
     {
-      "name": "example_template",
-      "template": "{{category1}} and {{category2}}"
+      "isSnippet": true,
+      "name": "personTemplate",
+      "template": "a {{gender}} holding {{item}}"
+    },
+    {
+      "isSnippet": true,
+      "name": "animalTemplate",
+      "template": "a {{size}} {{animal}}"
+    },
+    {
+      "template": "a {{#r: \"portrait\"; \"photo\"}} of {{#r: #t:personTemplate; #t:animalTemplate}} in a {{location}}"
     }
   ],
   "categories": [
     {
-      "name": "category1",
+      "name": "gender",
       "values": [
-        "c1 v1",
-        "c1 v2"
+        "men",
+        "woman"
       ]
     },
     {
-      "name": "category2",
+      "name": "animal",
+      "path": "animals.json"
+    },
+    {
+      "name": "item",
       "values": [
-        {
-          "text": "c2 v1",
-          "weight": 0.5
-        },
-        {
-          "text": "c2 v2",
-          "weight": 0.5
-        }
+        "book",
+        "glass",
+        "flag"
+      ]
+    },
+    {
+      "name": "size",
+      "values": [
+        "big",
+        "small"
+      ]
+    },
+    {
+      "name": "location",
+      "values": [
+        "park",
+        "house",
+        "spaceship"
       ]
     }
   ]
