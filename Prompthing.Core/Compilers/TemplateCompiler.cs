@@ -38,10 +38,18 @@ public partial class TemplateCompiler : ICompiler<JObject, Template>
     {
         var name = GetTemplateName(obj.GetValue("Name", StringComparison.OrdinalIgnoreCase));
         var templateToken = obj.GetValue("Template", StringComparison.OrdinalIgnoreCase);
+        var isSnippetToken = obj.GetValue("IsSnippet", StringComparison.OrdinalIgnoreCase);
 
         if (templateToken == null)
         {
             throw new TemplateCompilationException("The 'Template' property is missing from the JObject.");
+        }
+
+        bool isSnippet = false;
+
+        if (isSnippetToken != null)
+        {
+            isSnippet = ((JValue)isSnippetToken).Value<bool>();
         }
 
         string template = templateToken.ToString();
@@ -54,7 +62,7 @@ public partial class TemplateCompiler : ICompiler<JObject, Template>
             container.AddChild(_interpreter.Interpret(segment));
         }
 
-        return new Template(name, container);
+        return new Template(name, isSnippet, container);
     }
 
     /// <summary>

@@ -116,7 +116,7 @@ public class DatasetCompiler
             referencePool.AddObject(templates[i].Name, templates[i]);
         }
         
-        return templates;
+        return templates.Where(x => !x.IsSnippet).ToArray();
     }
 }
 

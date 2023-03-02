@@ -39,9 +39,18 @@ public class TokenInterpreter
         return InterpretTokenValue(tokenValue);
     }
 
+    /// <summary>
+    /// Interprets a token value by trimming it, checking if it is an escaped string, category token, template token, loop token, or random token, resolving it accordingly, and returning the resulting BasicNode.
+    /// </summary>
+    /// <param name="tokenValue">The token value to interpret.</param>
+    /// <returns>A BasicNode representing the interpretation of the token value.</returns>
+    /// <exception cref="ArgumentException">Thrown if the token value is not a valid token.</exception>
     private BasicNode InterpretTokenValue(string tokenValue)
     {
         tokenValue = tokenValue.Trim();
+
+        if (IsEscapedString(tokenValue))
+            return new TextNode(tokenValue.Substring(1, tokenValue.Length - 2));
 
         if (IsCategoryToken(tokenValue))
             return ResolveCategoryToken(tokenValue);
@@ -57,6 +66,14 @@ public class TokenInterpreter
 
         throw new ArgumentException($"Invalid token: {tokenValue}");
     }
+
+    /// <summary>
+    /// Checks if the given token value is an escaped string by checking if it starts and ends with double quotes.
+    /// </summary>
+    /// <param name="tokenValue">The token value to check.</param>
+    /// <returns>True if the token value is an escaped string, false otherwise.</returns>
+    private static bool IsEscapedString(string tokenValue) => 
+        tokenValue.StartsWith('"') && tokenValue.EndsWith('"');
 
     /// <summary>
     /// Determines if the given token is plain text.
@@ -134,10 +151,20 @@ public class TokenInterpreter
 
         return new LoopNode(minIterations, maxIterations, node);
     }
-    
+
+    /// <summary>
+    /// Checks if the given token value is a random token by checking if it starts with "#r:" or "#random:".
+    /// </summary>
+    /// <param name="tokenValue">The token value to check.</param>
+    /// <returns>True if the token value is a random token, false otherwise.</returns>
     private static bool IsRandomToken(string tokenValue) => 
         !string.IsNullOrEmpty(tokenValue) && (tokenValue.StartsWith("#r:") || tokenValue.StartsWith("#random:"));
-    
+
+    /// <summary>
+    /// Resolves a random token by interpreting its arguments, creating a BasicNode for each one, and returning a RandomNode containing the BasicNodes.
+    /// </summary>
+    /// <param name="tokenValue">The token value to resolve.</param>
+    /// <returns>A RandomNode representing the random choice.</returns>
     private RandomNode ResolveRandomToken(string tokenValue)
     {
         var arguments = GetArguments(tokenValue);
