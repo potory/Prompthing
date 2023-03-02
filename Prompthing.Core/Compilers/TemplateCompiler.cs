@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using Prompthing.Core.Abstract;
 using Prompthing.Core.Entities;
 using Prompthing.Core.Templates.Nodes.Basic;
+using Prompthing.Core.Utilities;
 
 namespace Prompthing.Core.Compilers;
 

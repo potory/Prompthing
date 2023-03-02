@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using Prompthing.Core.Abstract;
 using Prompthing.Core.Entities;
 using Prompthing.Core.Templates.Nodes.Basic;
+using Prompthing.Core.Utilities;
 
 namespace Prompthing.Core.Compilers;
 
@@ -52,8 +53,13 @@ public partial class WrapperCompiler : ICompiler<JObject, Wrapper>
 
         int index = 0;
 
-        while (TokenInterpreter.ExtractTokenValue(segments[index]) != content)
+        while (true)
         {
+            if (segments[index].Length > 4 && TokenInterpreter.ExtractTokenValue(segments[index]) != content)
+            {
+                break;
+            }
+    
             if (index >= segments.Length)
             {
                 throw new ArgumentException();

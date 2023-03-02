@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Prompthing.Core.Compilers;
 using Prompthing.Core.Entities;
+using Prompthing.Core.Utilities;
 
 namespace Prompthing.Core.Templates;
 

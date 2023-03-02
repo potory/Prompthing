@@ -4,7 +4,7 @@ using Prompthing.Core.Templates;
 using Prompthing.Core.Templates.Nodes;
 using Prompthing.Core.Templates.Nodes.Basic;
 
-namespace Prompthing.Core;
+namespace Prompthing.Core.Utilities;
 
 /// <summary>
 /// Provides functionality to interpret and resolve tokens in strings.
@@ -34,9 +34,13 @@ public class TokenInterpreter
             return new TextNode(token);
         }
 
-        string tokenValue = ExtractTokenValue(token);
+        if (token.Length > 4)
+        {
+            string tokenValue = ExtractTokenValue(token);
+            return InterpretTokenValue(tokenValue);
+        }
 
-        return InterpretTokenValue(tokenValue);
+        throw new ArgumentException("Interpretable token must be longer then 4");
     }
 
     /// <summary>
