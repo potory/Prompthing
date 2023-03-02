@@ -1,4 +1,5 @@
-﻿using Prompthing.Core.Entities;
+﻿using System.Text.RegularExpressions;
+using Prompthing.Core.Entities;
 using Prompthing.Core.Templates;
 using Prompthing.Core.Templates.Nodes;
 using Prompthing.Core.Templates.Nodes.Basic;
@@ -35,17 +36,26 @@ public class TokenInterpreter
 
         string tokenValue = ExtractTokenValue(token);
 
-        if (IsCategoryToken(tokenValue))
-        {
-            return ResolveCategoryToken(tokenValue);
-        }
-        
-        if (IsTemplateToken(tokenValue))
-        {
-            return ResolveTemplateToken(tokenValue);
-        }
+        return InterpretTokenValue(tokenValue);
+    }
 
-        throw new ArgumentException($"Invalid token: {token}");
+    private BasicNode InterpretTokenValue(string tokenValue)
+    {
+        tokenValue = tokenValue.Trim();
+
+        if (IsCategoryToken(tokenValue))
+            return ResolveCategoryToken(tokenValue);
+
+        if (IsTemplateToken(tokenValue))
+            return ResolveTemplateToken(tokenValue);
+
+        if (IsLoopToken(tokenValue))
+            return ResolveLoopToken(tokenValue);
+
+        if (IsRandomToken(tokenValue))
+            return ResolveRandomToken(tokenValue);
+
+        throw new ArgumentException($"Invalid token: {tokenValue}");
     }
 
     /// <summary>
@@ -86,7 +96,7 @@ public class TokenInterpreter
     /// <param name="tokenValue">The token value to check.</param>
     /// <returns>true if the token value represents a template; otherwise, false.</returns>
     private static bool IsTemplateToken(string tokenValue) => 
-        !string.IsNullOrEmpty(tokenValue) && tokenValue.StartsWith("#template:");
+        !string.IsNullOrEmpty(tokenValue) && (tokenValue.StartsWith("#t:") || tokenValue.StartsWith("#template:"));
 
     /// <summary>
     /// Resolves a template token and returns the corresponding TemplateNode.
@@ -99,5 +109,109 @@ public class TokenInterpreter
         var reference = _referencePool.CreateReference<Template>(segments[1]);
 
         return new TemplateNode(reference);
+    }
+
+    /// <summary>
+    /// Checks if the given token value is a loop token by checking if it starts with "#l:" or "#loop:".
+    /// </summary>
+    /// <param name="tokenValue">The token value to check.</param>
+    /// <returns>True if the token value is a loop token, false otherwise.</returns>
+    private static bool IsLoopToken(string tokenValue) => 
+        !string.IsNullOrEmpty(tokenValue) && (tokenValue.StartsWith("#l:") || tokenValue.StartsWith("#loop:"));
+
+    /// <summary>
+    /// Resolves a loop token by parsing its arguments, determining the number of iterations, interpreting the token value, and returning a LoopNode.
+    /// </summary>
+    /// <param name="tokenValue">The token value to resolve.</param>
+    /// <returns>A LoopNode representing the loop.</returns>
+    private LoopNode ResolveLoopToken(string tokenValue)
+    {
+        var arguments = GetArguments(tokenValue);
+        var iterations = arguments[0];
+        
+        var (minIterations, maxIterations) = LoopIterations(iterations);
+        var node = InterpretTokenValue(arguments[1]);
+
+        return new LoopNode(minIterations, maxIterations, node);
+    }
+    
+    private static bool IsRandomToken(string tokenValue) => 
+        !string.IsNullOrEmpty(tokenValue) && (tokenValue.StartsWith("#r:") || tokenValue.StartsWith("#random:"));
+    
+    private RandomNode ResolveRandomToken(string tokenValue)
+    {
+        var arguments = GetArguments(tokenValue);
+        var nodes = new BasicNode[arguments.Length];
+
+        for (int index = 0; index < nodes.Length; index++)
+        {
+            nodes[index] = InterpretTokenValue(arguments[index]);
+        }
+
+        return new RandomNode(nodes);
+    }
+
+    /// <summary>
+    /// Determines the minimum and maximum number of iterations for a loop based on the given iterations argument.
+    /// </summary>
+    /// <param name="iterations">The iterations argument to parse.</param>
+    /// <returns>A tuple containing the minimum and maximum number of iterations.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if the iterations argument is null or empty.</exception>
+    /// <exception cref="ArgumentException">Thrown if the iterations argument is not in the correct format or if the minimum iterations value is greater than the maximum iterations value.</exception>
+    private static (int minIterations, int maxIterations) LoopIterations(string iterations)
+    {
+        if (string.IsNullOrEmpty(iterations))
+        {
+            throw new ArgumentNullException(nameof(iterations), "Iterations argument cannot be null or empty.");
+        }
+
+        if (!Regex.IsMatch(iterations, @"^\d+(-\d+)?$"))
+        {
+            throw new ArgumentException("Iterations argument is not in the correct format. Please enter a positive integer or a range of positive integers separated by a dash (-).");
+        }
+
+        int minIterations, maxIterations;
+
+        var sep = iterations.Split('-');
+
+        if (sep.Length == 1)
+        {
+            if (!int.TryParse(iterations, out minIterations))
+            {
+                throw new ArgumentException("Iterations argument is not a valid integer value.", nameof(iterations));
+            }
+            maxIterations = minIterations;
+        }
+        else
+        {
+            if (!int.TryParse(sep[0], out minIterations))
+            {
+                throw new ArgumentException("Minimum iterations value is not a valid integer value.", nameof(iterations));
+            }
+            if (!int.TryParse(sep[1], out maxIterations))
+            {
+                throw new ArgumentException("Maximum iterations value is not a valid integer value.", nameof(iterations));
+            }
+
+            if (minIterations > maxIterations)
+            {
+                throw new ArgumentException("Minimum iterations value cannot be greater than the maximum iterations value.", nameof(iterations));
+            }
+        }
+
+        return (minIterations, maxIterations);
+    }
+
+    /// <summary>
+    /// Gets the arguments for a token by extracting the substring after the first colon and splitting it by semicolons.
+    /// </summary>
+    /// <param name="tokenValue">The token value to extract arguments from.</param>
+    /// <returns>An array of strings representing the arguments.</returns>
+    private static string[] GetArguments(string tokenValue)
+    {
+        var argsIndex = tokenValue.IndexOf(':') + 1;
+        var arguments = tokenValue.Substring(argsIndex, tokenValue.Length - argsIndex).Split(';');
+
+        return arguments;
     }
 }

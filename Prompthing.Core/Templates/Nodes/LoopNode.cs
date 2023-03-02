@@ -1,23 +1,28 @@
 ﻿using System.Text;
-using Prompthing.Core.Entities;
 using Prompthing.Core.Templates.Nodes.Basic;
 
 namespace Prompthing.Core.Templates.Nodes;
 
 public class LoopNode : BasicNode
 {
-    private readonly DelayedReference<Loop> _loop;
+    private readonly int _iterationsMin;
+    private readonly int _iterationsMax;
+    private readonly BasicNode _node;
 
-    public LoopNode(DelayedReference<Loop> loop)
+    public LoopNode(int iterationsMin, int iterationsMax, BasicNode node)
     {
-        _loop = loop;
+        _iterationsMin = iterationsMin;
+        _iterationsMax = iterationsMax;
+        _node = node;
     }
 
     public override void Evaluate(StringBuilder output)
     {
-        for (int i = 0; i < _loop.Value.Iterations; i++)
+        var iterations = Random.Shared.Next(_iterationsMin, _iterationsMax+1);
+        
+        for (int i = 0; i < iterations; i++)
         { 
-            _loop.Value.Nodes.Evaluate(output);
+            _node.Evaluate(output);
         }
     }
 }
