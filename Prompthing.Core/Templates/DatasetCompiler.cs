@@ -6,7 +6,7 @@ namespace Prompthing.Core.Templates;
 
 public class DatasetCompiler
 {
-    public TemplateNode[] Compile(string jsonDataset)
+    public Template[] Compile(string jsonDataset)
     {
         var pool = new ReferencePool();
 
@@ -14,9 +14,7 @@ public class DatasetCompiler
 
         MapCategoriesToPool(jsonRoot, pool);
 
-        var templates = CompileTemplates(jsonRoot, pool);
-
-        return null;
+        return CompileTemplates(jsonRoot, pool);
     }
 
     /// <summary>
@@ -80,7 +78,15 @@ public class DatasetCompiler
         return categories;
     }
 
-    private TemplateNode[] CompileTemplates(JObject jsonObject, ReferencePool referencePool)
+    /// <summary>
+    /// Compiles an array of templates from a JObject.
+    /// </summary>
+    /// <param name="jsonObject">The JObject containing the templates.</param>
+    /// <param name="referencePool">The reference pool used to store the compiled templates.</param>
+    /// <returns>An array of Template objects.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when jsonObject or referencePool is null.</exception>
+    /// <exception cref="DatasetCompilationException">Thrown when the 'Templates' property is missing from the JObject.</exception>
+    private Template[] CompileTemplates(JObject jsonObject, ReferencePool referencePool)
     {
         if (jsonObject == null)
         {
@@ -96,20 +102,21 @@ public class DatasetCompiler
         
         if (templatesRoot == null)
         {
-            throw new DatasetCompilationException("...");
+            throw new DatasetCompilationException("The 'Templates' property is missing from the JObject.");
         }
         
-        var compiler = new TemplateCompiler(referencePool);
+        var compiler = new TemplateCompiler(new TokenInterpreter(referencePool));
         var array = (JArray)templatesRoot;
         
-        var templates = new TemplateNode[array.Count];
+        var templates = new Template[array.Count];
 
         for (int i = 0; i < templates.Length; i++)
         {
             templates[i] = compiler.Compile((JObject) array[i]);
+            referencePool.AddObject(templates[i].Name, templates[i]);
         }
         
-        return null;
+        return templates;
     }
 }
 
