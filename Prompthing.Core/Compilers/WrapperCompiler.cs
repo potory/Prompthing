@@ -55,7 +55,7 @@ public partial class WrapperCompiler : ICompiler<JObject, Wrapper>
 
         while (true)
         {
-            if (segments[index].Length > 4 && TokenInterpreter.ExtractTokenValue(segments[index]) != content)
+            if (segments[index].Length > 4 && TokenInterpreter.ExtractTokenValue(segments[index]) == content)
             {
                 break;
             }
