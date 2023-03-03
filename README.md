@@ -90,3 +90,139 @@ Running the above code may result in one of the following text outputs, dependin
 - a woman holding book
 ### Conclusion
 This documentation provided a basic understanding of how to create and compile a JSON dataset, and how to use it to generate text output. The sample JSON dataset included a single template and two categories with predefined values, but this can be expanded to include more templates and categories with custom values.
+
+# Using Markup Features
+### Overview
+This documentation explains how to use markup features to generate text output with more advanced formatting. The markup syntax includes a hashtag followed by the name of the markup feature, followed by a colon and a list of arguments separated by semicolons.
+### Nested Templates
+To use nested templates, you must add a name to one of the templates in your dataset and use the special syntax {{#t:templateName}} to call it in text.
+
+For example, the following dataset includes two templates, "locationTemplate" and "genderItemTemplate". The "genderItemTemplate" uses the "locationTemplate" as a nested template:
+```json
+{
+  "templates": [
+    {
+      "name": "locationTemplate",
+      "template": "standing in a {{location}}"
+    },
+    {
+      "template": "a {{gender}} holding {{item}} {{#t:locationTemplate}}"
+    }
+  ]
+}
+```
+The "genderItemTemplate" can generate text output like "a man holding a book standing in a library".
+### Snippets
+If you have a template that is just a snippet and you don't want it to be compiled, you can toggle the "isSnippet" boolean to exclude it from the return values of dataset compilation.
+
+For example:
+```json
+{
+  "templates": [
+    {
+      "isSnippet": true,
+      "name": "locationSnippet",
+      "template": "{{preposition}} a {{location}}"
+    },
+    {
+      "template": "standing {{#t:locationSnippet}}",
+      "name": "standingTemplate"
+    }
+  ]
+}
+```
+In this example, "locationSnippet" is a snippet template and "standingTemplate" uses "locationSnippet" as a nested template. When the dataset is compiled, only "standingTemplate" will be returned as a compiled template.
+
+### Random
+To use random markup feature, you must use the special syntax {{#r:tokenName1;tokenName2;...;tokenNameN}} to call it in text. In this case, one of the tokens inside the #r function will be randomly selected for compilation.
+
+Here's an example dataset using the random markup feature:
+```json
+{
+  "templates": [
+    {
+      "isSnippet": true,
+      "name": "catTemplate",
+      "template": "a small young cat"
+    },
+    {
+      "isSnippet": true,
+      "name": "dogTemplate",
+      "template": "a big old dog"
+    },
+    {
+      "name": "menTemplate",
+      "template": "a man standing with {{#r:#t:catTemplate;#t:dogTemplate}}"
+    }
+  ]
+}
+```
+In the above example, the menTemplate contains a random markup feature that selects either catTemplate or dogTemplate. During compilation, one of the templates will be chosen at random and included in the output.
+
+Here's an example of how the output may look like after compiling the dataset:
+
+- "a man standing with a small young cat"
+- "a man standing with a big old dog"
+
+### Loops
+
+Loops allow you to repeat a token or a snippet of text multiple times. There are two ways to specify the number of iterations: you can either specify a fixed number or a range of possible numbers.
+
+To use loop markup feature, you must use the special syntax `{{#l:3;tokenName}}` or `{{#l;0-5;tokenName}}`. In the first case, the loop inside the text will be repeated exactly three times. In the second case, the loop will choose a random number of iterations from 0 to 5.
+
+For example, suppose we have the following template:
+
+```json
+{
+  "name": "foxTemplate",
+  "template": "{{#l:3;\"little fox, \"}}"
+}
+```
+
+Then we will get output like this: "little fox, little fox, little fox, "
+
+If we have the following template:
+
+```json
+{
+  "name": "foxTemplate",
+  "template": "{{#l:2-4;\"little fox, \"}}"
+}
+```
+
+Then we can get any of this outputs:
+- "little fox, little fox, "
+- "little fox, little fox, little fox, "
+- "little fox, little fox, little fox, little fox, ".
+
+Note that the token or snippet of text that is being repeated can be any valid token or snippet, including other markup features.
+
+### Wrappers
+To create a wrapper, you need to define a new object in the JSON array 'wrappers'. Each wrapper requires a name, a 'content' placeholder name, and the wrapper content itself. The placeholder name should be unique within the wrapper, and is used to indicate where the content should be inserted.
+```json
+{
+  "templates": [
+    {
+      "name": "exampleContent",
+      "isSnippet": true,
+      "template": "some example content"
+    },
+    {
+      "template": "{{#w:exampleWrapper(#t:exampleContent)}}"
+    }
+  ],
+  "wrappers": [
+    {
+      "name": "exampleWrapper",
+      "content": "placeholder",
+      "wrapper": "!!! {{placeholder}} !!!"
+    }
+  ]
+}
+```
+
+After a wrapper is defined, you can use it with the syntax: `{{#w:wrapperName(tokenName)}}`.
+
+For example, if we compile the non-snippet template from the previous example, we would get the following text:
+
+`!!! some example content !!!`
