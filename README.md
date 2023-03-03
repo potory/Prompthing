@@ -30,7 +30,7 @@ A Wrapper is similar to a Template, but it includes an additional special tag th
 ### Overview
 This documentation explains how to create and compile a JSON dataset containing templates and categories, and how to use it to generate text output. The sample JSON dataset provided includes a single template and two categories with predefined values.
 ### Creating a JSON Dataset
-To create a JSON dataset, create a file and give it a name with a ".json" extension. In this example, we will create a file named "example.json" with the following content:
+To create a JSON dataset, create a file and give it a name with a `.json` extension. In this example, we will create a file named `example.json` with the following content:
 ```json
 {
   "templates": [
@@ -57,7 +57,7 @@ To create a JSON dataset, create a file and give it a name with a ".json" extens
   ]
 }
 ```
-The above JSON dataset includes one template and two categories. The "templates" category includes a single template, which contains placeholders enclosed in double curly braces. The "categories" category includes two categories, "gender" and "item", each with predefined values.
+The above JSON dataset includes one template and two categories. The "templates" category includes a single template, which contains placeholders enclosed in double curly braces. The `categories` category includes two categories, `gender` and `item`, each with predefined values.
 
 ### Compiling a JSON Dataset
 
@@ -68,7 +68,7 @@ string content = File.ReadAllText("example.json");
 var templates = new DatasetCompiler().Compile(content);
 ```
 
-The above code reads the content of the "example.json" file and compiles it using the `Compile()` method of the `DatasetCompiler` class. The resulting compiled templates are stored in the templates variable.
+The above code reads the content of the `example.json` file and compiles it using the `Compile()` method of the `DatasetCompiler` class. The resulting compiled templates are stored in the templates variable.
 
 ### Generating Text Output
 Once the JSON dataset has been compiled, you can generate text output by evaluating the `Node` property of the compiled template. To do this, create a new `StringBuilder` object and pass it to the `Evaluate()` method of the `Node` property as follows:
@@ -77,10 +77,10 @@ Once the JSON dataset has been compiled, you can generate text output by evaluat
 var stringBuilder = new StringBuilder();
 templates[0].Node.Evaluate(stringBuilder);
 ```
-The above code creates a new `StringBuilder` object and passes it to the `Evaluate()` method of the `Node` property of the first compiled template. The resulting text output is stored in the stringBuilder variable.
+The above code creates a new `StringBuilder` object and passes it to the `Evaluate()` method of the `Node` property of the first compiled template. The resulting text output is stored in the `stringBuilder` variable.
 
 ### Example Output
-Running the above code may result in one of the following text outputs, depending on the values randomly selected from the "gender" and "item" categories:
+Running the above code may result in one of the following text outputs, depending on the values randomly selected from the `gender` and `item` categories:
 
 - a men holding book
 - a woman holding flag
@@ -95,9 +95,9 @@ This documentation provided a basic understanding of how to create and compile a
 ### Overview
 This documentation explains how to use markup features to generate text output with more advanced formatting. The markup syntax includes a hashtag followed by the name of the markup feature, followed by a colon and a list of arguments separated by semicolons.
 ### Nested Templates
-To use nested templates, you must add a name to one of the templates in your dataset and use the special syntax {{#t:templateName}} to call it in text.
+To use nested templates, you must add a name to one of the templates in your dataset and use the special syntax `{{#t:templateName}}` to call it in text.
 
-For example, the following dataset includes two templates, "locationTemplate" and "genderItemTemplate". The "genderItemTemplate" uses the "locationTemplate" as a nested template:
+For example, the following dataset includes two templates, `locationTemplate` and `genderItemTemplate`. The `genderItemTemplate` uses the `locationTemplate` as a nested template:
 ```json
 {
   "templates": [
@@ -111,9 +111,9 @@ For example, the following dataset includes two templates, "locationTemplate" an
   ]
 }
 ```
-The "genderItemTemplate" can generate text output like "a man holding a book standing in a library".
+The `genderItemTemplate` can generate text output like `a man holding a book standing in a library`.
 ### Snippets
-If you have a template that is just a snippet and you don't want it to be compiled, you can toggle the "isSnippet" boolean to exclude it from the return values of dataset compilation.
+If you have a template that is just a snippet and you don't want it to be compiled, you can toggle the `isSnippet` boolean to exclude it from the return values of dataset compilation.
 
 For example:
 ```json
@@ -131,10 +131,10 @@ For example:
   ]
 }
 ```
-In this example, "locationSnippet" is a snippet template and "standingTemplate" uses "locationSnippet" as a nested template. When the dataset is compiled, only "standingTemplate" will be returned as a compiled template.
+In this example, `locationSnippet` is a snippet template and `standingTemplate` uses `locationSnippet` as a nested template. When the dataset is compiled, only `standingTemplate` will be returned as a compiled template.
 
 ### Random
-To use random markup feature, you must use the special syntax {{#r:tokenName1;tokenName2;...;tokenNameN}} to call it in text. In this case, one of the tokens inside the #r function will be randomly selected for compilation.
+To use random markup feature, you must use the special syntax `{{#r:tokenName1;tokenName2;...;tokenNameN}}` to call it in text. In this case, one of the tokens inside the `#r` function will be randomly selected for compilation.
 
 Here's an example dataset using the random markup feature:
 ```json
@@ -157,12 +157,12 @@ Here's an example dataset using the random markup feature:
   ]
 }
 ```
-In the above example, the menTemplate contains a random markup feature that selects either catTemplate or dogTemplate. During compilation, one of the templates will be chosen at random and included in the output.
+In the above example, the menTemplate contains a random markup feature that selects either `catTemplate` or `dogTemplate`. During compilation, one of the templates will be chosen at random and included in the output.
 
 Here's an example of how the output may look like after compiling the dataset:
 
-- "a man standing with a small young cat"
-- "a man standing with a big old dog"
+- `a man standing with a small young cat`
+- `a man standing with a big old dog`
 
 ### Loops
 
@@ -179,7 +179,7 @@ For example, suppose we have the following template:
 }
 ```
 
-Then we will get output like this: "little fox, little fox, little fox, "
+Then we will get output like this: `little fox, little fox, little fox, `
 
 If we have the following template:
 
@@ -191,9 +191,9 @@ If we have the following template:
 ```
 
 Then we can get any of this outputs:
-- "little fox, little fox, "
-- "little fox, little fox, little fox, "
-- "little fox, little fox, little fox, little fox, ".
+- `little fox, little fox, `
+- `little fox, little fox, little fox, `
+- `little fox, little fox, little fox, little fox, `
 
 Note that the token or snippet of text that is being repeated can be any valid token or snippet, including other markup features.
 
