@@ -56,7 +56,7 @@ To create a JSON dataset, create a file and give it a name with a `.json` extens
   ]
 }
 ```
-The above JSON dataset includes one template and two categories. The "templates" category includes a single template, which contains placeholders enclosed in double curly braces. The `categories` category includes two categories, `gender` and `item`, each with predefined values.
+The above JSON dataset includes one template and two categories. The `templates` array includes a single template, which contains placeholders enclosed in double curly braces. The `categories` array includes two categories, `gender` and `item`, each with predefined values.
 
 ### Compiling a JSON Dataset
 
