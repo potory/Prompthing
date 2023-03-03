@@ -4,8 +4,7 @@ Prompthing is a flexible text generation library designed for use with JSON temp
 
 Prompthing is particularly well-suited for generating text output from structured data sources, such as APIs or databases. The library supports a variety of special markup features, including:
 
-Choosing from pre-defined lists: Prompthing can select words or phrases from pre-defined lists, allowing you to easily incorporate dynamic and varied content into your templates. 
-
+- **Choosing from pre-defined lists**: Prompthing can select words or phrases from pre-defined lists, allowing you to easily incorporate dynamic and varied content into your templates.
 - **Loops**: Prompthing supports loops, making it easy to generate repeated content from arrays or other data structures.
 - **Nested templates**: Prompthing allows you to nest templates within each other, enabling you to build complex, hierarchical text output with ease.
 - **Random token selection**: Prompthing supports selecting a random token from a pre-defined list right in a template, making it easy to create diverse and engaging text content.
@@ -15,7 +14,7 @@ Choosing from pre-defined lists: Prompthing can select words or phrases from pre
 Prompthing is a flexible text generation library that provides a range of tools and features for creating dynamic and engaging text output from structured data sources. The library includes several key entities that are used to define and generate text, including **Category**, **Term**, **Template**, and **Wrapper**.
 
 ### Category
-A Category is a dataset that contains a collection of Term objects that can be used to generate dynamic text. A Category can be defined as a collection of words or phrases that have a common theme or are otherwise related. For example, you might define a Category called "animal" that contains terms such as "dog", "cat", "bird", and so on.
+A Category is a dataset that contains a collection of Term objects that can be used to generate dynamic text. A Category can be defined as a collection of words or phrases that have a common theme or are otherwise related. For example, you might define a Category called `animal` that contains terms such as `dog`, `cat`, `bird`, and so on.
 
 ### Term
 A Term is the smallest unit in the library and represents a single word or phrase. A Term can include a text value and a weight value, which can be used to influence the likelihood of the Term being selected during text generation. The weight value can be any positive decimal, and higher values will increase the chances of the Term being selected.
