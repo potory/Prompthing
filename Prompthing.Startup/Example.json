@@ -1,29 +1,7 @@
 ﻿{
   "templates": [
     {
-      "isSnippet": true,
-      "name": "personTemplate",
       "template": "a {{gender}} holding {{item}}"
-    },
-    {
-      "isSnippet": true,
-      "name": "animalTemplate",
-      "template": "a {{size}} {{animal}}"
-    },
-    {
-      "name": "compose",
-      "isSnippet": true,
-      "template": "a {{#r: \"portrait\"; \"photo\"}} of a dog in a {{location}}"
-    },
-    {
-      "template": "{{#w:exampleWrapper(#t:compose)}}"
-    }
-  ],
-  "wrappers": [
-    {
-      "name": "exampleWrapper",
-      "content": "content",
-      "wrapper": "Hi! Here is your prompt: \"{{content}}\". {{#r:\"I'm an example wrapper!\";\"I also can use all templates features!\"}}"
     }
   ],
   "categories": [
@@ -35,30 +13,11 @@
       ]
     },
     {
-      "name": "animal",
-      "path": "animals.json"
-    },
-    {
       "name": "item",
       "values": [
         "book",
         "glass",
         "flag"
-      ]
-    },
-    {
-      "name": "size",
-      "values": [
-        "big",
-        "small"
-      ]
-    },
-    {
-      "name": "location",
-      "values": [
-        "park",
-        "house",
-        "spaceship"
       ]
     }
   ]
