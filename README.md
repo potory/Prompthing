@@ -82,12 +82,12 @@ The above code creates a new `StringBuilder` object and passes it to the `Evalua
 ### Example Output
 Running the above code may result in one of the following text outputs, depending on the values randomly selected from the `gender` and `item` categories:
 
-- a men holding book
-- a woman holding flag
-- a woman holding glass
-- a men holding flag
-- a men holding glass
-- a woman holding book
+- `a men holding book`
+- `a woman holding flag`
+- `a woman holding glass`
+- `a men holding flag`
+- `a men holding glass`
+- `a woman holding book`
 ### Conclusion
 This documentation provided a basic understanding of how to create and compile a JSON dataset, and how to use it to generate text output. The sample JSON dataset included a single template and two categories with predefined values, but this can be expanded to include more templates and categories with custom values.
 
@@ -198,7 +198,7 @@ Then we can get any of this outputs:
 Note that the token or snippet of text that is being repeated can be any valid token or snippet, including other markup features.
 
 ### Wrappers
-To create a wrapper, you need to define a new object in the JSON array 'wrappers'. Each wrapper requires a name, a 'content' placeholder name, and the wrapper content itself. The placeholder name should be unique within the wrapper, and is used to indicate where the content should be inserted.
+To create a wrapper, you need to define a new object in the JSON array `wrappers`. Each wrapper requires a name, a `content` placeholder name, and the wrapper content itself. The placeholder name should be unique within the wrapper, and is used to indicate where the content should be inserted.
 ```json
 {
   "templates": [
