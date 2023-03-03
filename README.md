@@ -1,6 +1,6 @@
 # Prompthing
 
-The Prompthing library is a flexible text generation library designed for use with JSON templates. The library includes a number of powerful features that make it easy to create rich, dynamic text output with minimal code.
+Prompthing is a flexible text generation library designed for use with JSON templates. The library includes a number of powerful features that make it easy to create rich, dynamic text output with minimal code.
 
 Prompthing is particularly well-suited for generating text output from structured data sources, such as APIs or databases. The library supports a variety of special markup features, including:
 
