@@ -10,6 +10,22 @@ Prompthing is particularly well-suited for generating text output from structure
 - **Random token selection**: Prompthing supports selecting a random token from a pre-defined list right in a template, making it easy to create diverse and engaging text content.
 - **Wrapper nodes**: Prompthing includes wrapper nodes, which allow you to wrap content with additional text or markup.
 
+### Installation
+
+You can install Prompthing by cloning its GitHub repository and adding a reference to the `Prompthing.Core` project in your solution. To do so, follow these steps:
+
+1. Clone the Prompthing repository from GitHub: <br>
+   ```git clone https://github.com/potory/Prompthing.git```
+2. Add the Prompthing project to your solution:
+    - In Visual Studio, right-click your solution and select "Add" -> "Existing Project".
+    - Navigate to the location where you cloned the Prompthing repository and select the `Prompthing.Core.csproj` file.
+3. Add a reference to the Prompthing.Core project in your console application project:
+    - In Visual Studio, right-click your console application project and select "Add" -> "Reference".
+    - In the "Reference Manager" window, select the "Projects" tab.
+    - Select the Prompthing.Core project and click "Add".
+
+Now you can start using the Prompthing library in your console application.
+
 # Core Entities
 Prompthing is a flexible text generation library that provides a range of tools and features for creating dynamic and engaging text output from structured data sources. The library includes several key entities that are used to define and generate text, including **Category**, **Term**, **Template**, and **Wrapper**.
 

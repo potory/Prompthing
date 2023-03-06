@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Prompthing.Core.Abstract;
 using Prompthing.Core.Entities;
 using Prompthing.Core.Templates;
 using Prompthing.Core.Templates.Nodes;
@@ -11,13 +12,13 @@ namespace Prompthing.Core.Utilities;
 /// </summary>
 public class TokenInterpreter
 {
-    private readonly ReferencePool _referencePool;
+    private readonly IReferencePool _referencePool;
 
     /// <summary>
     /// Initializes a new instance of the TokenInterpreter class.
     /// </summary>
     /// <param name="referencePool">The reference pool used to create references to categories and templates.</param>
-    public TokenInterpreter(ReferencePool referencePool)
+    public TokenInterpreter(IReferencePool referencePool)
     {
         _referencePool = referencePool;
     }

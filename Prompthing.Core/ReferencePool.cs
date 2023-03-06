@@ -1,11 +1,12 @@
 ﻿using System.Collections.Concurrent;
+using Prompthing.Core.Abstract;
 
 namespace Prompthing.Core;
 
 /// <summary>
 /// A thread-safe pool of delayed references to objects.
 /// </summary>
-public class ReferencePool
+public class ReferencePool : IReferencePool
 {
     // Dictionary of dictionaries that store delayed references to objects of a given type
     private readonly ConcurrentDictionary<Type, ConcurrentDictionary<string, DelayedReference>> _references = new();
