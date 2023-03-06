@@ -9,6 +9,8 @@ public class WrapperNode : BasicNode
     private readonly BasicNode _content;
     private readonly DelayedReference<Wrapper> _wrapper;
 
+    public Wrapper Wrapper => _wrapper.Value;
+
     public WrapperNode(BasicNode content, DelayedReference<Wrapper> wrapper)
     {
         _content = content;

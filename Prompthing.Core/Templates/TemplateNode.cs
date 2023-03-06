@@ -7,6 +7,9 @@ namespace Prompthing.Core.Templates;
 public class TemplateNode : BasicNode
 {
     private readonly DelayedReference<Template> _template;
+
+    public Template Template => _template.Value;
+    
     public TemplateNode(DelayedReference<Template> template)
     {
         _template = template;

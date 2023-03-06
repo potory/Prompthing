@@ -10,6 +10,8 @@ public sealed class CategoryNode : BasicNode
     private readonly DelayedReference<Category> _category;
     private string RandomTerm => _category.Value.Terms.OneOfWeighted().Text;
 
+    public Category Category => _category.Value;
+
     public CategoryNode(DelayedReference<Category> category) => 
         _category = category;
 
