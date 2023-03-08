@@ -7,7 +7,7 @@ namespace Prompthing.Core.Templates;
 
 public class DatasetCompiler
 {
-    public Template[] Compile(string jsonDataset)
+    public Dataset Compile(string jsonDataset)
     {
         var pool = new ReferencePool();
 
@@ -16,7 +16,8 @@ public class DatasetCompiler
         MapCategoriesToPool(jsonRoot, pool);
         MapWrappersToPool(jsonRoot, pool);
 
-        return CompileTemplates(jsonRoot, pool);
+        var templates = CompileTemplates(jsonRoot, pool);
+        return new Dataset(pool, templates);
     }
 
     /// <summary>

@@ -55,6 +55,11 @@ public partial class TemplateCompiler : ICompiler<JObject, Template>
 
         string template = templateToken.ToString();
 
+        return Compile(name, template, isSnippet);
+    }
+
+    public Template Compile(string name, string template, bool isSnippet)
+    {
         var container = new ContainerNode();
         var segments = ToSegments(template);
 
