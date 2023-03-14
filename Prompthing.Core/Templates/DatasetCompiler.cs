@@ -12,47 +12,25 @@ namespace Prompthing.Core.Templates;
 public class DatasetCompiler
 {
     private readonly FunctionFactory _factory;
-    private readonly IServiceCollection _serviceCollection;
-    private readonly ServiceProvider _serviceProvider;
+    private readonly ReferencePool _referencePool;
 
-    public DatasetCompiler()
+    public DatasetCompiler(IServiceProvider provider)
     {
-        _serviceCollection = new ServiceCollection()
-            .AddSingleton(x => x)
-            .AddSingleton<FunctionContext>()
-            .AddSingleton<FunctionParser>()
-            .AddSingleton<ReferencePool>();
-
-        _serviceProvider = _serviceCollection.BuildServiceProvider();
-        _factory = new FunctionFactory(_serviceProvider);
-
-        RegisterFunctions();
-
-        _serviceCollection.AddSingleton(_factory);
-    }
-
-    private void RegisterFunctions()
-    {
-        _factory.RegisterFunction<TemplateFunction>("t");
-        _factory.RegisterFunction<TemplateFunction>("temp");
-        _factory.RegisterFunction<TemplateFunction>("template");
-        _factory.RegisterFunction<BackspaceFunction>("backspace");
+        _referencePool = provider.GetService<ReferencePool>();
+        _factory = provider.GetService<FunctionFactory>();
     }
 
     public Dataset Compile(string jsonDataset)
     {
-        var pool = _serviceProvider.GetService<ReferencePool>();
-        pool.Clear();
+        _referencePool.Clear();
 
         var jsonRoot = JObject.Parse(jsonDataset);
 
-        MapCategoriesToPool(jsonRoot, pool);
-        MapWrappersToPool(jsonRoot, pool);
+        MapCategoriesToPool(jsonRoot, _referencePool);
+        MapWrappersToPool(jsonRoot, _referencePool);
 
-        var templates = CompileTemplates(jsonRoot, pool);
-        _serviceCollection.Remove<ReferencePool>();
-
-        return new Dataset(_factory, pool, templates);
+        var templates = CompileTemplates(jsonRoot, _referencePool);
+        return new Dataset(_factory, _referencePool, templates);
     }
 
     /// <summary>
