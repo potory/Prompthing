@@ -1,10 +1,12 @@
 ﻿using System.Text;
 using Prompthing.Core.Templates;
+using SonScript.Core.Attributes;
 using SonScript.Core.Extensions;
 using SonScript.Core.Functions;
 
 namespace Prompthing.Core.Functions;
 
+[AllowFunctionCaching]
 public class PrompthingFunction : Function
 {
     private readonly Dictionary<string, Dataset> _cache = new();
