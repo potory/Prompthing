@@ -107,6 +107,12 @@ public class ReferencePool : IReferencePool
 
         return _objects.GetOrAdd(type, _ => new ConcurrentDictionary<string, object>());
     }
+
+    public void Clear()
+    {
+        _references.Clear();
+        _objects.Clear();
+    }
 }
 
 

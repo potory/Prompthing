@@ -23,6 +23,15 @@ public class ContainerNode : BasicNode, IContainer<StringBuilder>
         _children.Add(child);
         child.SetParent(this);
     }
+    public void AddChildren(IReadOnlyList<INode<StringBuilder>> children)
+    {
+        _children.AddRange(children);
+
+        foreach (var child in _children)
+        {
+            child.SetParent(this);
+        }
+    }
 
     public void RemoveChild(INode<StringBuilder> child)
     {

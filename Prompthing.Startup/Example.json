@@ -1,7 +1,12 @@
 ﻿{
   "templates": [
     {
+      "name" : "location",
+      "isSnippet": true,
       "template": "a {{gender}} holding {{item}}"
+    },
+    {
+      "template": "a {{gender}} holding {{item}} and #t('location')"
     }
   ],
   "categories": [
