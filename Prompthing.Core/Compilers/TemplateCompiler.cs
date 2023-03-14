@@ -4,6 +4,7 @@ using Prompthing.Core.Abstract;
 using Prompthing.Core.Entities;
 using Prompthing.Core.Templates.Nodes.Basic;
 using Prompthing.Core.Utilities;
+using SonScript.Core;
 
 namespace Prompthing.Core.Compilers;
 
@@ -19,7 +20,9 @@ public partial class TemplateCompiler : ICompiler<JObject, Template>
     private static partial Regex SplitRegex();
 
     private readonly Regex _splitRegex = SplitRegex();
+
     private readonly TokenInterpreter _interpreter;
+    private readonly ExpressionSeparator _separator;
 
     /// <summary>
     /// Creates a new instance of the TemplateCompiler class.
@@ -28,6 +31,7 @@ public partial class TemplateCompiler : ICompiler<JObject, Template>
     public TemplateCompiler(TokenInterpreter interpreter)
     {
         _interpreter = interpreter;
+        _separator = new ExpressionSeparator();
     }
 
     /// <summary>
@@ -76,8 +80,11 @@ public partial class TemplateCompiler : ICompiler<JObject, Template>
     /// </summary>
     /// <param name="template">The template string to split.</param>
     /// <returns>An array of segments.</returns>
-    private string[] ToSegments(string template) => 
-        _splitRegex.Split(template).Where(segment => !string.IsNullOrEmpty(segment)).ToArray();
+    private IReadOnlyList<string> ToSegments(string template) => 
+        _splitRegex.Split(template)
+            .Where(segment => !string.IsNullOrEmpty(segment))
+            .SelectMany(x => _separator.Separate(x))
+            .ToArray();
 
     /// <summary>
     /// Gets the name of the template from the name token.

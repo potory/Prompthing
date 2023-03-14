@@ -1,23 +1,36 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
 using Prompthing.Core.Compilers;
 using Prompthing.Core.Entities;
+using Prompthing.Core.Extensions;
+using Prompthing.Core.Functions;
 using Prompthing.Core.Utilities;
+using SonScript.Core;
 
 namespace Prompthing.Core.Templates;
 
 public class DatasetCompiler
 {
+    private readonly FunctionFactory _factory;
+    private readonly ReferencePool _referencePool;
+
+    public DatasetCompiler(IServiceProvider provider)
+    {
+        _referencePool = provider.GetService<ReferencePool>();
+        _factory = provider.GetService<FunctionFactory>();
+    }
+
     public Dataset Compile(string jsonDataset)
     {
-        var pool = new ReferencePool();
+        _referencePool.Clear();
 
-        JObject jsonRoot = JObject.Parse(jsonDataset);
+        var jsonRoot = JObject.Parse(jsonDataset);
 
-        MapCategoriesToPool(jsonRoot, pool);
-        MapWrappersToPool(jsonRoot, pool);
+        MapCategoriesToPool(jsonRoot, _referencePool);
+        MapWrappersToPool(jsonRoot, _referencePool);
 
-        var templates = CompileTemplates(jsonRoot, pool);
-        return new Dataset(pool, templates);
+        var templates = CompileTemplates(jsonRoot, _referencePool);
+        return new Dataset(_factory, _referencePool, templates);
     }
 
     /// <summary>
@@ -26,7 +39,7 @@ public class DatasetCompiler
     /// <param name="jsonObject">The root JSON object containing the categories.</param>
     /// <param name="referencePool">The reference pool to add the categories to.</param>
     /// <exception cref="ArgumentNullException">Thrown if jsonObject or referencePool is null.</exception>
-    private void MapCategoriesToPool(JObject jsonObject, ReferencePool referencePool)
+    private static void MapCategoriesToPool(JObject jsonObject, ReferencePool referencePool)
     {
         if (jsonObject == null)
         {
@@ -107,9 +120,9 @@ public class DatasetCompiler
         return categories;
     }
 
-    private static Wrapper[] CompileWrappers(JToken data, ReferencePool referencePool)
+    private Wrapper[] CompileWrappers(JToken data, ReferencePool referencePool)
     {
-        var compiler = new WrapperCompiler(new TokenInterpreter(referencePool));
+        var compiler = new WrapperCompiler(new TokenInterpreter(referencePool, _factory));
 
         var wrappersArray = (JArray)data;
         var wrappers = new Wrapper[wrappersArray.Count];
@@ -137,7 +150,7 @@ public class DatasetCompiler
     /// <returns>An array of Template objects.</returns>
     /// <exception cref="ArgumentNullException">Thrown when jsonObject or referencePool is null.</exception>
     /// <exception cref="DatasetCompilationException">Thrown when the 'Templates' property is missing from the JObject.</exception>
-    private static Template[] CompileTemplates(JObject jsonObject, ReferencePool referencePool)
+    private Template[] CompileTemplates(JObject jsonObject, ReferencePool referencePool)
     {
         if (jsonObject == null)
         {
@@ -156,7 +169,7 @@ public class DatasetCompiler
             throw new DatasetCompilationException("The 'Templates' property is missing from the JObject.");
         }
         
-        var compiler = new TemplateCompiler(new TokenInterpreter(referencePool));
+        var compiler = new TemplateCompiler(new TokenInterpreter(referencePool, _factory));
         var array = (JArray)templatesRoot;
         
         var templates = new Template[array.Count];

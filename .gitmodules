@@ -1,0 +1,3 @@
+[submodule "Plugins/SonScript"]
+	path = Plugins/SonScript
+	url = https://github.com/potory/SonScript.git

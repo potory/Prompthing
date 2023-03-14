@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prompthing.Core", "Prompthi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prompthing.Startup", "Prompthing.Startup\Prompthing.Startup.csproj", "{9086879C-3C0B-44B4-A7F3-7BB979213DC6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SonScript.Core", "Plugins\SonScript\SonScript.Core\SonScript.Core.csproj", "{55A32296-40F8-48D3-98F3-65298BF28C19}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{9086879C-3C0B-44B4-A7F3-7BB979213DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9086879C-3C0B-44B4-A7F3-7BB979213DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9086879C-3C0B-44B4-A7F3-7BB979213DC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55A32296-40F8-48D3-98F3-65298BF28C19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55A32296-40F8-48D3-98F3-65298BF28C19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55A32296-40F8-48D3-98F3-65298BF28C19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55A32296-40F8-48D3-98F3-65298BF28C19}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

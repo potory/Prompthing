@@ -1,5 +1,13 @@
 # Prompthing
 
+> **Warning**<br>
+> This readme is deprecated due to the changing macro engine to SonScript and requires an update.<br><br>
+> `#t` macro must now be used as `#t('templateName')`<br>
+> `#r` macro has been replaced with `#oneof('value 1', 'value 2', 'value 3')`<br><br>
+> `Wrappers` are currently not available.<br>
+> `Loops` are currently not available.
+
+
 Prompthing is a flexible text generation library designed for use with JSON templates. The library includes a number of powerful features that make it easy to create rich, dynamic text output with minimal code.
 
 Prompthing is particularly well-suited for generating text output from structured data sources, such as APIs or databases. The library supports a variety of special markup features, including:
