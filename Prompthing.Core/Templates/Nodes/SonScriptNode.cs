@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Prompthing.Core.Functions;
 using Prompthing.Core.Templates.Nodes.Basic;
 using SonScript.Core.Nodes;
 
@@ -12,6 +13,20 @@ public class SonScriptNode : BasicNode
     {
         _node = node;
     }
-    public override void Evaluate(StringBuilder output) => 
+    public override void Evaluate(StringBuilder output)
+    {
+        if (IsBackspaceFunction(_node))
+        {
+            EvaluateBackspace(output);
+            return;
+        }
+
         output.Append(_node.Evaluate());
+    }
+
+    private void EvaluateBackspace(StringBuilder output) => 
+        output.Length -= (int)_node.Evaluate();
+
+    private static bool IsBackspaceFunction(FunctionNode node) => 
+        node is FunctionCallNode callNode && callNode.Function is BackspaceFunction;
 }

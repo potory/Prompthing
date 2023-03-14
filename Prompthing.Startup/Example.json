@@ -6,7 +6,7 @@
       "template": "a {{gender}} holding {{item}}"
     },
     {
-      "template": "a {{gender}} holding {{item}} and #t('location')"
+      "template": "a {{gender}} holding {{item}} and #backspace(7)"
     }
   ],
   "categories": [

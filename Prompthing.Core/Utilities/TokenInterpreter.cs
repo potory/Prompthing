@@ -1,7 +1,5 @@
-﻿using System.Text.RegularExpressions;
-using Prompthing.Core.Abstract;
+﻿using Prompthing.Core.Abstract;
 using Prompthing.Core.Entities;
-using Prompthing.Core.Templates;
 using Prompthing.Core.Templates.Nodes;
 using Prompthing.Core.Templates.Nodes.Basic;
 using SonScript.Core;

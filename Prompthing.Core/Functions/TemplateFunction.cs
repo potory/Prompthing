@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using Prompthing.Core.Entities;
-using SonScript.Core.Attributes;
 using SonScript.Core.Functions;
 
 namespace Prompthing.Core.Functions;

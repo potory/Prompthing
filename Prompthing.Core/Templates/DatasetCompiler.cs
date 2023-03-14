@@ -36,6 +36,7 @@ public class DatasetCompiler
         _factory.RegisterFunction<TemplateFunction>("t");
         _factory.RegisterFunction<TemplateFunction>("temp");
         _factory.RegisterFunction<TemplateFunction>("template");
+        _factory.RegisterFunction<BackspaceFunction>("backspace");
     }
 
     public Dataset Compile(string jsonDataset)
