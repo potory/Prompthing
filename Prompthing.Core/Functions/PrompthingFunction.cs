@@ -20,6 +20,8 @@ public class PrompthingFunction : Function
     }
     public override object Evaluate(List<object> arguments)
     {
+        _sb.Clear();
+
         string path = (string)arguments.Single();
         
         if (!_cache.TryGetValue(path, out var dataset))
