@@ -15,11 +15,11 @@ public interface INode<TOutput>
     /// Gets the parent container of the node.
     /// </summary>
     /// <returns>The parent container of the node.</returns>
-    IContainer<TOutput>? Parent { get; }
+    IContainer<TOutput> Parent { get; }
 
     /// <summary>
     /// Sets the parent container of the node.
     /// </summary>
     /// <param name="parent">The parent container to set.</param>
-    void SetParent(IContainer<TOutput>? parent);
+    void SetParent(IContainer<TOutput> parent);
 }

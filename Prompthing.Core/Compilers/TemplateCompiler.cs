@@ -91,7 +91,7 @@ public partial class TemplateCompiler : ICompiler<JObject, Template>
     /// </summary>
     /// <param name="nameToken">The name token.</param>
     /// <returns>The name of the template.</returns>
-    private static string GetTemplateName(JToken? nameToken) => 
+    private static string GetTemplateName(JToken nameToken) => 
         nameToken == null ? Guid.NewGuid().ToString() : nameToken.ToString();
 }
 

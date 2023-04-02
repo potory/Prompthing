@@ -9,7 +9,7 @@ public class DelayedReference
 
     private readonly bool _useCache;
 
-    private object? _value;
+    private object _value;
 
     /// <summary>
     /// Initializes a new instance of the DelayedReference class.
@@ -17,7 +17,7 @@ public class DelayedReference
     /// <param name="source">The function that creates the referenced object.</param>
     /// <param name="useCache">Whether to cache the referenced object once it is created. Default is true.</param>
     /// <param name="value">A pre-created value for the referenced object. If this is not null, the source function will not be called.</param>
-    public DelayedReference(Func<object> source, bool useCache = true, object? value = null)
+    public DelayedReference(Func<object> source, bool useCache = true, object value = null)
     {
         _source = source;
         _useCache = useCache;
@@ -62,7 +62,7 @@ public class DelayedReference<T> : DelayedReference where T: class
     /// <param name="source">The function that creates the referenced object.</param>
     /// <param name="useCache">Whether to cache the referenced object once it is created. Default is true.</param>
     /// <param name="value">A pre-created value for the referenced object. If this is not null, the source function will not be called.</param>
-    public DelayedReference(Func<T> source, bool useCache = true, T? value = null) : base(source, useCache, value)
+    public DelayedReference(Func<T> source, bool useCache = true, T value = null) : base(source, useCache, value)
     {
         
     }
