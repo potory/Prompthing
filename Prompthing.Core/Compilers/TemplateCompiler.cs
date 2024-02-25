@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using Prompthing.Core.Abstract;
 using Prompthing.Core.Entities;
 using Prompthing.Core.Templates.Nodes.Basic;
@@ -11,18 +10,10 @@ namespace Prompthing.Core.Compilers;
 /// <summary>
 /// Compiles a template from a JObject by interpreting tokens within the template.
 /// </summary>
-public partial class TemplateCompiler : ICompiler<JObject, Template>
+public class TemplateCompiler : ICompiler<JObject, Template>
 {
-    /// <summary>
-    /// Regular expression used to split the template into segments.
-    /// </summary>
-    [GeneratedRegex("({{[^}]+}})")]
-    private static partial Regex SplitRegex();
-
-    private readonly Regex _splitRegex = SplitRegex();
-
     private readonly TokenInterpreter _interpreter;
-    private readonly ExpressionSeparator _separator;
+    private readonly SegmentHandler _segmentHandler;
 
     /// <summary>
     /// Creates a new instance of the TemplateCompiler class.
@@ -31,7 +22,7 @@ public partial class TemplateCompiler : ICompiler<JObject, Template>
     public TemplateCompiler(TokenInterpreter interpreter)
     {
         _interpreter = interpreter;
-        _separator = new ExpressionSeparator();
+        _segmentHandler = new SegmentHandler();
     }
 
     /// <summary>
@@ -65,7 +56,7 @@ public partial class TemplateCompiler : ICompiler<JObject, Template>
     public Template Compile(string name, string template, bool isSnippet)
     {
         var container = new ContainerNode();
-        var segments = ToSegments(template);
+        var segments = _segmentHandler.GetSegments(template);
 
         foreach (var segment in segments)
         {
@@ -74,17 +65,6 @@ public partial class TemplateCompiler : ICompiler<JObject, Template>
 
         return new Template(name, container, isSnippet);
     }
-
-    /// <summary>
-    /// Splits a template string into segments using the split regex.
-    /// </summary>
-    /// <param name="template">The template string to split.</param>
-    /// <returns>An array of segments.</returns>
-    private IReadOnlyList<string> ToSegments(string template) => 
-        _splitRegex.Split(template)
-            .Where(segment => !string.IsNullOrEmpty(segment))
-            .SelectMany(x => _separator.Separate(x))
-            .ToArray();
 
     /// <summary>
     /// Gets the name of the template from the name token.
